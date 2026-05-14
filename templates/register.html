@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <title>Register</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <div class="card">
+      <h1>Register</h1>
+      <form method="POST" action="/register">
+        <input
+          type="text"
+          id="username"
+          name="username"
+          required
+          placeholder="Enter your username"
+        />
+        <br /><br />
+
+        <input
+          type="password"
+          id="password"
+          name="password"
+          required
+          placeholder="Enter your password"
+        />
+        <br /><br />
+        <button type="submit">Register</button>
+      </form>
+
+      <a href="/login">Login here</a>
+    </div>
+  </body>
+</html>
