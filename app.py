@@ -13,17 +13,20 @@ bcrypt = Bcrypt(app)
 @app.route('/')
 def home():
     if 'user' in session:
-        return render_template('home.html', user=session.get('user'))
+        return render_template('home.html', user=session['user'])
     return redirect('/login')
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
+        
+        username = request.form["username"]
+        password = request.form["password"]
 
-        hashed_password = bcrypt.generate_password_hash(request.form["password"]).decode('utf-8')
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
-        new_user = User(username=request.form["username"], password=hashed_password)
+        new_user = User(username=username, password=hashed_password)
         
         db.session.add(new_user)
         db.session.commit()
@@ -36,9 +39,12 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        user = User.query.filter_by(username=request.form["username"]).first()
+        
+        username = request.form["username"]
+        password = request.form["password"]
+        user = User.query.filter_by(username=username).first()
 
-        if user and bcrypt.check_password_hash(user.password, request.form["password"]):
+        if user and bcrypt.check_password_hash(user.password, password):
             session['user'] = user.username
             return redirect('/')
 
