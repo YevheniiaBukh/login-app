@@ -1,4 +1,5 @@
 # login-app
+
 Flask Login/Register project with Python and SQL
 
 # Local Setup
@@ -32,4 +33,8 @@ Flask Login/Register project with Python and SQL
         Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
     The app uses SQLite and will create tasks.db automatically on first run.
+
+# About
+
+This is my logo app project.
 
