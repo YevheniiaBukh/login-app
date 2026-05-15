@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, session
 from flask_bcrypt import Bcrypt
+from flask_sqlalchemy import SQLAlchemy
 from models import db, User
 
 app = Flask(__name__)
@@ -7,7 +8,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SECRET_KEY'] = 'your-secret-key'
 
-db.init_app(app)
+db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 
 @app.route('/')
@@ -54,6 +55,9 @@ def login():
 def logout():
     session.pop('user', None)
     return redirect('/login')
+
+with app.app_context():
+    db.create_all()
 
 if __name__ == '__main__':
     with app.app_context():
