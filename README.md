@@ -26,7 +26,7 @@ Flask Login/Register project with Python and SQL
     Open the app in your browser:
         http://127.0.0.1:5000
 
-Notes
+# Notes
 
     If PowerShell blocks script execution, run:
         Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
