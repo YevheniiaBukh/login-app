@@ -14,6 +14,14 @@ app.config['SECRET_KEY'] = 'your-secret-key'
 db.init_app(app)
 bcrypt = Bcrypt(app)
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)
+    
+with app.app_context():
+    db.create_all()
+
 @app.route('/')
 def home():
     if 'user' in session:
@@ -71,7 +79,5 @@ def logout():
 
 
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
 
