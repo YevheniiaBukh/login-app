@@ -2,13 +2,16 @@ from flask import Flask, render_template, request, redirect, session
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from models import db, User
+from flask import flash
 
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'your-secret-key'
 
-db = SQLAlchemy(app)
+
+db.init_app(app)
 bcrypt = Bcrypt(app)
 
 @app.route('/')
@@ -24,6 +27,11 @@ def register():
         
         username = request.form["username"]
         password = request.form["password"]
+        
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            flash("Username already exists.", "error")
+            return redirect('/register')
 
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
@@ -31,6 +39,7 @@ def register():
         
         db.session.add(new_user)
         db.session.commit()
+        flash("User registered successfully.", "success")
 
         return redirect('/login')
 
@@ -43,11 +52,15 @@ def login():
         
         username = request.form["username"]
         password = request.form["password"]
+        
         user = User.query.filter_by(username=username).first()
 
         if user and bcrypt.check_password_hash(user.password, password):
             session['user'] = user.username
             return redirect('/')
+        
+        flash("Wrong username or password.", "error")
+        return redirect('/login')
 
     return render_template('login.html')
 
@@ -56,8 +69,6 @@ def logout():
     session.pop('user', None)
     return redirect('/login')
 
-with app.app_context():
-    db.create_all()
 
 if __name__ == '__main__':
     with app.app_context():

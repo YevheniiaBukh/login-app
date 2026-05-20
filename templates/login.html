@@ -4,12 +4,20 @@
     <meta charset="UTF-8" />
 
     <title>Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='style.css') }}"
     />
   </head>
   <body>
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %} {% for category, message in messages %}
+    <div class="flash-messages">{{ message }}</div>
+
+    {% endfor %} {% endif %} {% endwith %}
+
     <div class="card">
       <h1>Login</h1>
       <form method="POST" action="/login">

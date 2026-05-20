@@ -67,3 +67,12 @@ a {
     transform: translateY(0);
   }
 }
+
+.flash-messages {
+  background-color: rgba(255, 255, 255, 0.8);
+  top: 20px;
+  position: absolute;
+  padding: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
