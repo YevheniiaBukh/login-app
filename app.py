@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, session
 from flask_bcrypt import Bcrypt
-from flask_sqlalchemy import SQLAlchemy
 from models import db, User
 from flask import flash
 
@@ -13,13 +12,9 @@ app.config['SECRET_KEY'] = 'your-secret-key'
 
 db.init_app(app)
 bcrypt = Bcrypt(app)
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(150), unique=True, nullable=False)
-    password = db.Column(db.String(200), nullable=False)
     
 with app.app_context():
+    db.drop_all()
     db.create_all()
 
 @app.route('/')
