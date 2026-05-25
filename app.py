@@ -14,14 +14,15 @@ db.init_app(app)
 bcrypt = Bcrypt(app)
     
 with app.app_context():
-    db.drop_all()
+    
     db.create_all()
 
 @app.route('/')
 def home():
-    if 'user' in session:
-        return render_template('home.html', user=session['user'])
-    return redirect('/login')
+    if 'user_id' not in session:
+        return redirect('/login')
+    
+    return render_template('home.html')
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -59,17 +60,27 @@ def login():
         user = User.query.filter_by(username=username).first()
 
         if user and bcrypt.check_password_hash(user.password, password):
-            session['user'] = user.username
-            return redirect('/')
+            session['user_id'] = user.id
+            return redirect('/profile')
         
         flash("Wrong username or password.", "error")
         return redirect('/login')
 
     return render_template('login.html')
 
+
+@app.route('/profile')
+def profile():
+    if 'user_id' not in session:
+        return redirect('/login')
+    user = User.query.get(session['user_id'])
+    if not user:
+        return redirect('/login')
+    return render_template('profile.html', user=user)
+
 @app.route('/logout')
 def logout():
-    session.pop('user', None)
+    session.pop('user_id', None)
     return redirect('/login')
 
 
