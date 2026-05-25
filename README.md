@@ -2,6 +2,13 @@
 
 Flask Login/Register project with Python and SQL
 
+# Technologies
+Python
+Flask
+SQLALchemy
+HTML/CSS
+SQLite
+
 # Local Setup
 
     Open a terminal in the project folder:
